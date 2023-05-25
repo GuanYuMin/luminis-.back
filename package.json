@@ -1,0 +1,8 @@
+{
+  "name": "project-server-lumnis-backend",
+  "version": "1.0.0",
+  "description": "<b>Descripción del proyecto:</b> <br> Este es un proyecto para la administracion de un centro estudiante, en el cual se puede realizar las siguientes acciones: <br> - Suscribirse a un tipo de suscripcion. - Agregar talleresa su suscripcion. - Agregar adicionales a sus suscripciones. - Tener perfiles controlados por roles. - Tener un historial de transacciones. - Tener un historial de pagos. - Tener un historial de talleres. - etc.",
+  "devDependencies": {
+    "serverless-python-requirements": "^6.0.0"
+  }
+}
