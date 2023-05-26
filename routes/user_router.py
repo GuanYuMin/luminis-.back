@@ -9,11 +9,12 @@ from utils.Session_bd import get_db
 #importando las funciones de auser  
 from  functions.user_fumctions import get_user_by_id_function, get_user_by_email_function, get_users_function, create_user_function, update_user_function, delete_user_function , recover_password_function,get_users_function_with_roles_and_photos
 #para poder usar el schema de usuario
-from schema.authentication_schema import UserBase, UserLogin , UserCreate,UserUpdate
+from schema.authentication_schema import UserBase, UserLogin , UserCreate,UserUpdate ,EmailSchema
 #funciones de utils para hashear la contraseña
 from utils.hashed_password import hash_password
 #para ingresar a la ruta de user se necesita que el middleware de auth este activo
 from middlewares.access_route_for_token import AccessRouteForTokenMiddleware
+from fastapi import BackgroundTasks
 
 
 #router para los usuarios logeados
@@ -57,6 +58,5 @@ def delete_user(id: int, db: Session = Depends(get_db)):
 
 # ruta recuperar contraseña
 @user_router.post("/recovery_password")
-def recovery_password(email: str, db: Session = Depends(get_db)):
-    print(email)
-    return recover_password_function(db, email)
+async def recovery_password(email: EmailSchema, db: Session = Depends(get_db)):
+    return await recover_password_function(db, email)

@@ -36,7 +36,7 @@ def show_courses(
     
     No parameters.
     
-    Returns all courses with course_id, membership_id, video_list, name, description, active, content, content_2, product, registration_timestamp and update_timestamp.
+    Returns all courses with course_id, membership_id, video_list, name, description, active, content, content_2, index, learning, interactive, product, registration_timestamp and update_timestamp.
     """
     db_course = get_courses_function(db, skip=0, limit=100000)
     return db_course
@@ -68,7 +68,7 @@ def show_course_by_id(
     - Path:
         - **course_id: int** => This is the identifier of the course and is required.
     
-    Returns the course with course_id, membership_id, video_list, name, description, active, content, content_2, product, registration_timestamp and update_timestamp.
+    Returns the course with course_id, membership_id, video_list, name, description, active, content, content_2, index, learning, interactive, product, registration_timestamp and update_timestamp.
     """
     db_course = get_course_by_id_function(db, course_id)
     return db_course
@@ -92,7 +92,7 @@ def create_course(
     
     Parameters:
     - Request body parameter:
-        - **course: Course** => A course model with membership_id, video_list, name, description, active, content, content_2 and product.
+        - **course: Course** => A course model with membership_id, video_list, name, description, active, content, content_2, index, learning, interactive and product.
     
     Returns a message with confirmation of the change or the detail by which the change was not made.
     """
@@ -127,7 +127,7 @@ def update_course(
     - Path:
         - **course_id: int** => This is the identifier of the course and is required.
     - Request body parameter:
-        - **course: Course** => A course model with membership_id, video_list, name, description, active, content, content_2 and product.
+        - **course: Course** => A course model with membership_id, video_list, name, description, active, content, content_2, index, learning, interactive and product.
     
     Returns a message with confirmation of the change or the detail by which the change was not made.
     """

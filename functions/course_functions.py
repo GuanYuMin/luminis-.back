@@ -60,6 +60,9 @@ def create_course_function(
         active=course.active,
         content=course.content,
         content_2=course.content_2,
+        index=course.index,
+        learning=course.learning,
+        interactive=course.interactive,
         product=course.product,
         registration_timestamp=datetime.now(),
         update_timestamp=datetime.now()
@@ -100,6 +103,9 @@ def update_course_function(
     db_course.active=course.active
     db_course.content=course.content
     db_course.content_2=course.content_2
+    db_course.index=course.index
+    db_course.learning=course.learning
+    db_course.interactive=course.interactive
     db_course.product=course.product
     db_course.update_timestamp=datetime.now()
     db.commit()

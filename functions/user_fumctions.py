@@ -3,20 +3,20 @@ from sqlalchemy import update
 # importando el packete datetime para poder usarlo en el modelo de usuario
 from datetime import datetime
 # para poder usar el modelo de usuario
-from models.authentication_model import User , Role ,Photo
+from models.authentication_model import User, Role, Photo
 # schema de usuario
-from schema.authentication_schema import UserBase, UserLogin,UserUpdate , UserCreate
-#funciones de utils para hashear la contraseña
+from schema.authentication_schema import UserBase, UserLogin, UserUpdate, UserCreate, EmailSchema
+# funciones de utils para hashear la contraseña
 from utils.hashed_password import hash_password
-#para poder usar el token
+# para poder usar el token
 from auth.authentication import validate_token
-#imporatndo fastap_email para poder enviar correos
-from fastapi_mail import FastMail, MessageSchema,ConnectionConfig,MessageType
+# imporatndo fastap_email para poder enviar correos
+from fastapi_mail import FastMail, MessageSchema, ConnectionConfig, MessageType
 # importando la configuracion desde utils
-from utils.Connection_Email_config import conf
-from utils.send_template_email import template_mail
-
+from utils.Connection_Email_config import send_email
+from utils.generate_password import generate_password
 from fastapi.responses import JSONResponse
+
 
 # funcion para obtener todos los usuarios con sus roles y fotos
 def get_users_function_with_roles_and_photos(db: Session, skip: int = 0, limit: int = 100):
@@ -32,6 +32,8 @@ def get_users_function_with_roles_and_photos(db: Session, skip: int = 0, limit: 
         return users
 
 # funcion para obtener todos los usuarios
+
+
 def get_users_function(db: Session, skip: int = 0, limit: int = 100):
     # si no existen usuarios en la base de datos retorna un arreglo vacio
     if db.query(User).count() == 0:
@@ -41,6 +43,8 @@ def get_users_function(db: Session, skip: int = 0, limit: int = 100):
         return db.query(User).offset(skip).limit(limit).all()
 
 # funcion para obtener el usuario por el id
+
+
 def get_user_by_id_function(db: Session, id: int):
     # si no exite el id del usuario en la base de datos retorna un mensaje de error
     if db.query(User).filter(User.id == id).count() == 0:
@@ -50,6 +54,8 @@ def get_user_by_id_function(db: Session, id: int):
         return db.query(User).filter(User.id == id).first()
 
 # funcion para obtener el usuario por el email
+
+
 def get_user_by_email_function(db: Session, email: str):
     # si no exite el email del usuario en la base de datos retorna un mensaje de error
     if db.query(User).filter(User.email == email).count() == 0:
@@ -57,8 +63,10 @@ def get_user_by_email_function(db: Session, email: str):
     return db.query(User).filter(User.email == email).first()
 
 # funcion para crear un usuario
+
+
 def create_user_function(db: Session, user: UserCreate):
-    #validar que el rol exista
+    # validar que el rol exista
     if db.query(Role).filter(Role.id == user.role_id).count() == 0:
         return JSONResponse(status_code=404, content={"message": "No existe el rol ingresado en la base de datos"})
     # validar quela photo exista
@@ -67,13 +75,18 @@ def create_user_function(db: Session, user: UserCreate):
     # si el email del usuario ya existe en la base de datos retorna un mensaje de error
     if db.query(User).filter(User.email == user.email).count() != 0:
         return JSONResponse(status_code=404, content={"message": "Ya existe un usuario con el email ingresado en la base de datos"})
+    #validar que el formato de fecha sea de la forma correcta 23/12/1998 dia/mes/año
+    try:
+        datetime.strptime(user.birthdate, '%d/%m/%Y')
+    except ValueError:
+        return JSONResponse(status_code=404, content={"message": "El formato de fecha ingresado no es correcto, debe ser dia/mes/año"})
     # si el username del usuario ya existe en la base de datos retorna un mensaje de error
     else:
         # se crea el usuario
         db_user = User(
             email=user.email,
             password=hash_password(user.password),
-            old_password= "",
+            old_password="",
             username=user.username,
             name=user.name,
             midlename=user.midlename,
@@ -91,19 +104,21 @@ def create_user_function(db: Session, user: UserCreate):
         return JSONResponse(status_code=200, content={"message": "Usuario creado correctamente"})
 
 # funcion para actualizar un usuario siempre y cuando valide el token
-def update_user_function(db: Session, id: int, user: UserUpdate,Autorization: str):
-    #validar el token
+
+
+def update_user_function(db: Session, id: int, user: UserUpdate, Autorization: str):
+    # validar el token
     token = Autorization.split(" ")[1]
-    validate = validate_token(token , output=True)
+    validate = validate_token(token, output=True)
     if validate['status'] == 200:
         id_user = validate['data']['id']
         if id_user != id:
             return JSONResponse(status_code=404, content={"message": "No tienes permisos para actualizar este usuario"})
-        #validar el role
-        if db.query(Role).filter(Role.id==user.role_id).count() == 0:
+        # validar el role
+        if db.query(Role).filter(Role.id == user.role_id).count() == 0:
             return JSONResponse(status_code=404, content={"message": "No existe el rol del usuario que quieres modificar"})
-        #validar la photo
-        if db.query(Photo).filter(Photo.id==user.photo_id).count() == 0:
+        # validar la photo
+        if db.query(Photo).filter(Photo.id == user.photo_id).count() == 0:
             return JSONResponse(status_code=404, content={"message": "No existe la foto del usuario que quieres modificar"})
         # si el id a actualizar no existe en la base de datos retorna un mensaje de error
         if db.query(User).filter(User.id == id).count() == 0:
@@ -129,6 +144,8 @@ def update_user_function(db: Session, id: int, user: UserUpdate,Autorization: st
         return JSONResponse(status_code=validate["status"], content={"message": validate["message"]})
 
 # funcion para eliminar un usuario
+
+
 def delete_user_function(db: Session, id: int):
     # si el id a eliminar no existe en la base de datos retorna un mensaje de error
     if db.query(User).filter(User.id == id).count() == 0:
@@ -138,23 +155,26 @@ def delete_user_function(db: Session, id: int):
     db.commit()
     return JSONResponse(status_code=200, content={"message": "Usuario eliminado correctamente"})
 
-# funcion para Recuperar contraseña 
-def recover_password_function(db: Session, email: str):
-    # si el email a recuperar no existe en la base de datos retorna un mensaje de error
+# funcion para Recuperar contraseña
+
+
+async def recover_password_function(db: Session, email: EmailSchema):
+
+    email = email.dict().get("email")[0]
+    print(email)
+
     if db.query(User).filter(User.email == email).count() == 0:
-        return JSONResponse(status_code=404, content={"message": "No existe el usuario a recuperar en la base de datos"})
-    # si el email a recuperar existe en la base de datos retorna un mensaje de exito
+        return JSONResponse(status_code=404, content={"message": "No existe el usuario con el email ingresado en la base de datos"})
     else:
-        # configurando el correo electronico
-        template = template_mail(email=email, password="123456")
-        message = MessageSchema(
-            subject="Recuperar contraseña",
-            recipients=[email],
-            body=template,
-            subtype="html"
-        )
-        # enviando el correo
-        fm = FastMail(conf)
-        fm.send_message(message)
-        return JSONResponse(status_code=200, content={"message": "Correo enviado correctamente"})
-        
+        # se obtiene el usuario
+        db_user = db.query(User).filter(User.email == email).first()
+        # se genera una contraseña aleatoria
+        password = generate_password()
+        print(password)
+        # se actualiza la contraseña del usuario
+        db_user.old_password = db_user.password
+        db_user.password = hash_password(password)
+        db.commit()
+        # se envia el correo con la nueva contraseña
+        send_email(email, 'Recuperar Contraseña', f'Nueva contraseña: {password}')
+        return JSONResponse(status_code=200, content={"message": "Se ha enviado un correo con la nueva contraseña"})

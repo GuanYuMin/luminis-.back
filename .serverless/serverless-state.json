@@ -176,7 +176,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/project-server-luminis/prod/1684649889669-2023-05-21T06:18:09.669Z/pythonRequirements.zip"
+                "S3Key": "serverless/project-server-luminis/prod/1685039863402-2023-05-25T18:37:43.402Z/pythonRequirements.zip"
               },
               "LayerName": "project-server-luminis-prod-layer",
               "Description": "project-server-luminis-prod-layer",
@@ -192,7 +192,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/project-server-luminis/prod/1684649889669-2023-05-21T06:18:09.669Z/app.zip"
+                "S3Key": "serverless/project-server-luminis/prod/1685040085315-2023-05-25T18:41:25.315Z/app.zip"
               },
               "Handler": "main.handler",
               "Runtime": "python3.8",
@@ -220,14 +220,14 @@
               "AppLogGroup"
             ]
           },
-          "AppLambdaVersionvpyhlaORE2dty5qF71ugBmIEtjjkmxoKFoaUkav2lI": {
+          "AppLambdaVersionIoDR7fc82OVXHlFsUkr06k3CyJ6DnskydVZZwDMM": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AppLambdaFunction"
               },
-              "CodeSha256": "vNfY3wmP+Hj5ZhpgTFe3LXrw3dksXcaw4Ec1Bp4iLx8="
+              "CodeSha256": "Q7smt23McfTZfqEKropL9yXfYM7lp3E4GlPr0C16Gu4="
             }
           },
           "ApiGatewayRestApi": {
@@ -303,7 +303,7 @@
               "AppLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1684649828339": {
+          "ApiGatewayDeployment1685040075065": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -373,14 +373,14 @@
           },
           "PythonRequirementsLambdaLayerHash": {
             "Description": "Current Lambda layer hash",
-            "Value": "e3191a55130e35327d2f8508c23df9db242ad1bf",
+            "Value": "2c014164cbcfe9f5a3494ec60d6b057b41c2cf12",
             "Export": {
               "Name": "sls-project-server-luminis-prod-PythonRequirementsLambdaLayerHash"
             }
           },
           "PythonRequirementsLambdaLayerS3Key": {
             "Description": "Current Lambda layer S3Key",
-            "Value": "serverless/project-server-luminis/prod/1684649889669-2023-05-21T06:18:09.669Z/pythonRequirements.zip",
+            "Value": "serverless/project-server-luminis/prod/1685039863402-2023-05-25T18:37:43.402Z/pythonRequirements.zip",
             "Export": {
               "Name": "sls-project-server-luminis-prod-PythonRequirementsLambdaLayerS3Key"
             }
@@ -388,7 +388,7 @@
           "AppLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AppLambdaVersionvpyhlaORE2dty5qF71ugBmIEtjjkmxoKFoaUkav2lI"
+              "Ref": "AppLambdaVersionIoDR7fc82OVXHlFsUkr06k3CyJ6DnskydVZZwDMM"
             },
             "Export": {
               "Name": "sls-project-server-luminis-prod-AppLambdaFunctionQualifiedArn"
@@ -568,7 +568,7 @@
         "timeout": 30,
         "runtime": "python3.8",
         "vpc": {},
-        "versionLogicalId": "AppLambdaVersionvpyhlaORE2dty5qF71ugBmIEtjjkmxoKFoaUkav2lI"
+        "versionLogicalId": "AppLambdaVersionIoDR7fc82OVXHlFsUkr06k3CyJ6DnskydVZZwDMM"
       }
     },
     "configValidationMode": "warn",
@@ -578,7 +578,7 @@
       "package": {
         "individually": true,
         "artifactsS3KeyDirname": "serverless/project-server-luminis/prod/code-artifacts",
-        "artifactDirectoryName": "serverless/project-server-luminis/prod/1684649889669-2023-05-21T06:18:09.669Z"
+        "artifactDirectoryName": "serverless/project-server-luminis/prod/1685040085315-2023-05-25T18:41:25.315Z"
       },
       "provider": {
         "$ref": "$[\"service\"][\"provider\"]"
@@ -601,14 +601,15 @@
         "compatibleRuntimes": {
           "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"PythonRequirementsLambdaLayer\"][\"Properties\"][\"CompatibleRuntimes\"]"
         },
-        "package": {}
+        "package": {},
+        "artifactAlreadyUploaded": true
       }
     },
     "isDashboardMonitoringPreconfigured": false
   },
   "package": {
     "individually": true,
-    "artifactDirectoryName": "serverless/project-server-luminis/prod/1684649889669-2023-05-21T06:18:09.669Z",
+    "artifactDirectoryName": "serverless/project-server-luminis/prod/1685040085315-2023-05-25T18:41:25.315Z",
     "artifact": ""
   }
 }

@@ -63,7 +63,7 @@ CREATE TABLE tb_user (
   name VARCHAR(255) NOT NULL,
   midlename VARCHAR(255) NOT NULL,
   lastname VARCHAR(255) NOT NULL,
-  birthdate DATE NOT NULL,
+  birthdate VARCHAR(255) NOT NULL,
   phone VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
   old_password VARCHAR(255) NOT NULL,
@@ -86,3 +86,6 @@ ALTER TABLE tb_profile_photo DROP COLUMN user_id;
 DROP TABLE tb_user;
 --adicional la columna is_activate y que por defecto sea 1, dentro de la tabla tb_profile_photo y que este despues del photo_url
 ALTER TABLE tb_profile_photo ADD is_activate INT(1) NOT NULL DEFAULT 1 AFTER photo_url;
+
+--el campo birthdate de la tabla tb_user covertirlo de date a string 
+ALTER TABLE tb_user MODIFY birthdate VARCHAR(255) NOT NULL;

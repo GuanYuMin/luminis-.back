@@ -48,6 +48,20 @@ class Course(CourseBase):
         max_length=100,
         example="Content2"
     )
+    index: Optional[str]=Field(
+        default=None,
+        min_length=3,
+        example="[1, 2]"
+    )
+    learning: Optional[str]=Field(
+        default=None,
+        min_length=3,
+        example="[1, 2]"
+    )
+    interactive: Optional[bool] = Field(
+        default=1,
+        example=1
+    )
     product: str=Field(
         ...,
         min_length=4,

@@ -23,7 +23,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     midlename = Column(String(255), nullable=False)
     lastname = Column(String(255), nullable=False)
-    birthdate = Column(DateTime, nullable=False)
+    birthdate = Column(String(255), nullable=False)
     phone = Column(String(255), nullable=False)
     password = Column(String(255), nullable=False)
     old_password = Column(String(255), nullable=False)

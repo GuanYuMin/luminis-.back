@@ -18,6 +18,7 @@ from routes.blog_router import blog_router
 from routes.question_blog_router import question_blog_router
 from routes.answer_blog_router import answer_blog_router
 from routes.photo_router import photo_router
+from routes.openpay_router import openpay_router
 
 # Load environment variables
 load_dotenv()
@@ -52,6 +53,7 @@ app.include_router(blog_router, prefix="/blog", tags=["Blog"])
 app.include_router(question_blog_router, prefix="/question_blog", tags=["QuestionBlog"])
 app.include_router(answer_blog_router, prefix="/answer_blog", tags=["AnswerBlog"])
 app.include_router(photo_router, prefix="/photo", tags=["Photo"])
+app.include_router(openpay_router, prefix="/openpay", tags=["Openpay"])
 
 @app.get("/")
 async def root():
