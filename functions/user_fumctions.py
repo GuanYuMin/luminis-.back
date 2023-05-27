@@ -127,8 +127,6 @@ def update_user_function(db: Session, id: int, user: UserUpdate, Autorization: s
             # se actualiza el usuario
             db_user = db.query(User).filter(User.id == id).first()
             db_user.email = user.email
-            db_user.old_password = db_user.password
-            db_user.password = hash_password(user.password)
             db_user.username = user.username
             db_user.name = user.name
             db_user.midlename = user.midlename
@@ -137,7 +135,31 @@ def update_user_function(db: Session, id: int, user: UserUpdate, Autorization: s
             db_user.phone = user.phone
             db_user.role_id = user.role_id
             db_user.photo_id = user.photo_id
-            db_user.is_activate = user.is_activate
+            db.commit()
+            return JSONResponse(status_code=200, content={"message": "Usuario actualizado correctamente"})
+    else:
+        return JSONResponse(status_code=validate["status"], content={"message": validate["message"]})
+
+
+# funcion para actualizar la contraseña de un usuario validando el token
+
+
+def update_user_pwd_function(db: Session, id: int, user: UserUpdate, Autorization: str):
+    # validar el token
+    token = Autorization.split(" ")[1]
+    validate = validate_token(token, output=True)
+    if validate['status'] == 200:
+        id_user = validate['data']['id']
+        if id_user != id:
+            return JSONResponse(status_code=404, content={"message": "No tienes permisos para actualizar este usuario"})
+        # si el id a actualizar no existe en la base de datos retorna un mensaje de error
+        if db.query(User).filter(User.id == id).count() == 0:
+            return JSONResponse(status_code=404, content={"message": "No existe el usuario a actualizar en la base de datos"})
+        else:
+            # se actualiza el usuario
+            db_user = db.query(User).filter(User.id == id).first()
+            db_user.old_password = db_user.password
+            db_user.password = hash_password(user.password)
             db.commit()
             return JSONResponse(status_code=200, content={"message": "Usuario actualizado correctamente"})
     else:

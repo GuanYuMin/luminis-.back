@@ -60,3 +60,8 @@ def delete_user(id: int, db: Session = Depends(get_db)):
 @user_router.post("/recovery_password")
 async def recovery_password(email: EmailSchema, db: Session = Depends(get_db)):
     return await recover_password_function(db, email)
+
+# ruta para cambiar contraseña
+@user_router.put("/update_user_pwd/{id}")
+def update_user_pwd(id: int, user: UserUpdate, db: Session = Depends(get_db), Authorization: str = Header(...)):
+    return update_user_pwd_function(db, id, user, Authorization)
