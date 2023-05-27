@@ -151,17 +151,17 @@ def update_user_pwd_function(db: Session, id: int, user: UserUpdate, Autorizatio
     if validate['status'] == 200:
         id_user = validate['data']['id']
         if id_user != id:
-            return JSONResponse(status_code=404, content={"message": "No tienes permisos para actualizar este usuario"})
+            return JSONResponse(status_code=404, content={"message": "No tienes permisos para actualizar la contraseña de este usuario"})
         # si el id a actualizar no existe en la base de datos retorna un mensaje de error
         if db.query(User).filter(User.id == id).count() == 0:
-            return JSONResponse(status_code=404, content={"message": "No existe el usuario a actualizar en la base de datos"})
+            return JSONResponse(status_code=404, content={"message": "No existe el usuario en la base de datos"})
         else:
             # se actualiza el usuario
             db_user = db.query(User).filter(User.id == id).first()
             db_user.old_password = db_user.password
             db_user.password = hash_password(user.password)
             db.commit()
-            return JSONResponse(status_code=200, content={"message": "Usuario actualizado correctamente"})
+            return JSONResponse(status_code=200, content={"message": "Contraseña actualizada correctamente"})
     else:
         return JSONResponse(status_code=validate["status"], content={"message": validate["message"]})
 
